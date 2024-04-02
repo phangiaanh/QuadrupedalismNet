@@ -1,7 +1,8 @@
 import pickle
 import torch.nn as nn
-
-
+from .poseverts import verts_core, posemap, MatVecMult
+import numpy as np
+import chumpy as ch
 
 class SMAL(object):
   def __init__(self, model_path, cfg):
@@ -12,14 +13,14 @@ class SMAL(object):
     self.v = self.get_template(self.cfg)
 
   def get_template(self, cfg):
-    model = pickle.load(open(cfg['MODEL_PATH'], 'rb'), encoding='latin1')
+    model = self.load_model(cfg['MODEL_PATH'])
     nBetas = len(model.betas.r)
     data = pickle.load(open(cfg['DATA_PATH'], 'rb'), encoding='latin1')
     betas = data['cluster_means'][2][:nBetas]
     print(betas.shape)
 
-  def load_model(fname_or_dict):
-    dd = ready_arguments(fname_or_dict)
+  def load_model(self, fname_or_dict):
+    dd = self.ready_arguments(fname_or_dict)
     
     for i in dd:
         print(i)
@@ -44,10 +45,10 @@ class SMAL(object):
         
     return result
 
-  def ready_arguments(fname_or_dict):
+  def ready_arguments(self, fname_or_dict):
 
     if not isinstance(fname_or_dict, dict):
-        dd = pickle.load(open(fname_or_dict))
+        dd = pickle.load(open(fname_or_dict, 'rb'), encoding='latin1')
     else:
         dd = fname_or_dict
 
@@ -60,7 +61,7 @@ class SMAL(object):
 
     print('\n')
         
-    backwards_compatibility_replacements(dd)
+    self.backwards_compatibility_replacements(dd)
         
     want_shapemodel = 'shapedirs' in dd
     nposeparms = dd['kintree_table'].shape[1]*3
@@ -88,6 +89,29 @@ class SMAL(object):
         dd['v_posed'] = dd['v_template'] + dd['posedirs'].dot(posemap(dd['bs_type'])(dd['pose']))
             
     return dd
+
+  def backwards_compatibility_replacements(self, dd):
+
+    # replacements
+    if 'default_v' in dd:
+        dd['v_template'] = dd['default_v']
+        del dd['default_v']
+    if 'template_v' in dd:
+        dd['v_template'] = dd['template_v']
+        del dd['template_v']
+    if 'joint_regressor' in dd:
+        dd['J_regressor'] = dd['joint_regressor']
+        del dd['joint_regressor']
+    if 'blendshapes' in dd:
+        dd['posedirs'] = dd['blendshapes']
+        del dd['blendshapes']
+    if 'J' not in dd:
+        dd['J'] = dd['joints']
+        del dd['joints']
+
+    # defaults
+    if 'bs_style' not in dd:
+        dd['bs_style'] = 'lbs'
 
 class QuadrupedalismNet(nn.Module):
 
