@@ -21,9 +21,6 @@ class SMAL(object):
 
   def load_model(self, fname_or_dict):
     dd = self.ready_arguments(fname_or_dict)
-    
-    for i in dd:
-        print(i)
 
     args = {
         'pose': dd['pose'],
@@ -52,14 +49,13 @@ class SMAL(object):
     else:
         dd = fname_or_dict
 
-    for i in dd:
-        print(i)
-        if isinstance(dd[i], list) or isinstance(dd[i], str):   
-            print(len(dd[i]))
-        else:
-            print(dd[i].shape)
+    # for i in dd:
+    #     print(i)
+    #     if isinstance(dd[i], list) or isinstance(dd[i], str):   
+    #         print(len(dd[i]))
+    #     else:
+    #         print(dd[i].shape)
 
-    print('\n')
         
     self.backwards_compatibility_replacements(dd)
         
