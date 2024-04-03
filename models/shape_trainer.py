@@ -46,3 +46,6 @@ class Trainer():
       network.cuda()
     return
 
+  def init_training(self):
+    
+
