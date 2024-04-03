@@ -10,8 +10,8 @@ sys.path.append("..")
 
 class ShapeTrainer(Trainer):
 
-  def __init__(self, cfg):
-    self.cfg = cfg
+  def define_model(self):
+    cfg = self.cfg
     self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     self.save_directory = cfg['CHECKPOINT_DIR']
     self.image_size = (cfg['MODEL']['IMAGE_SIZE'][0], cfg['MODEL']['IMAGE_SIZE'][1])
@@ -31,25 +31,6 @@ class ShapeTrainer(Trainer):
 
 
 
-  def load_network(self, network, label, epoch, network_directory=None):
-    save_filename = f"{label}_{epoch}.pth"
-    if network_directory is None:
-        network_directory = self.save_directory
 
-    save_path = os.path.join(network_directory, save_filename)
-    return network.load_state_dict(torch.load(save_path))
-
-  def save_network(self, network, label, epoch, network_directory= None):
-    save_filename = f"{label}_{epoch}.pth"
-    if network_directory is None:
-        network_directory = self.save_directory
-
-    save_path = os.path.join(network_directory, save_filename)
-    torch.save(network.cpu().state_dict(), save_path)
-    if torch.cuda.is_available():
-      network.cuda()
-    return
-
-  def init_training(self):
     
 
