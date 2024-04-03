@@ -2,9 +2,13 @@ import pickle
 import torch
 import os
 import numpy as np
-from .quadrupedalismnet import QuadrupedalismNet
+from models.quadrupedalismnet import QuadrupedalismNet
+from .basic_trainer import Trainer
 
-class Trainer():
+import sys
+sys.path.append("..")
+
+class ShapeTrainer(Trainer):
 
   def __init__(self, cfg):
     self.cfg = cfg
@@ -25,24 +29,4 @@ class Trainer():
 
     #self.model = self.model.cuda()
 
-
-
-  def load_network(self, network, label, epoch, network_directory=None):
-    save_filename = f"{label}_{epoch}.pth"
-    if network_directory is None:
-        network_directory = self.save_directory
-
-    save_path = os.path.join(network_directory, save_filename)
-    return network.load_state_dict(torch.load(save_path))
-
-  def save_network(self, network, label, epoch, network_directory= None):
-    save_filename = f"{label}_{epoch}.pth"
-    if network_directory is None:
-        network_directory = self.save_directory
-
-    save_path = os.path.join(network_directory, save_filename)
-    torch.save(network.cpu().state_dict(), save_path)
-    if torch.cuda.is_available():
-      network.cuda()
-    return
 
