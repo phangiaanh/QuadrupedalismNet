@@ -12,6 +12,7 @@ cfg.AUTO_RESUME = True
 cfg.LABEL_PER_CLASS = 15
 cfg.MODEL_PATH = 'SMAL/smal_CVPR2017.pkl'
 cfg.DATA_PATH = 'SMAL/smal_CVPR2017_data.pkl'
+cfg.GEN_DIR = 'SMAL'
 
 # CUDNN params
 cfg.CUDNN = CN()
