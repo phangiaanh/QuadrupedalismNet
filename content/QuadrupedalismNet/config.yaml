@@ -7,13 +7,15 @@ WORKERS: 4
 PRINT_FREQ: 100
 AUTO_RESUME: True
 LABEL_PER_CLASS: 15
-MODEL_PATH: SMAL/smal_CVPR2017.pkl
-DATA_PATH: SMAL/smal_CVPR2017_data.pkl
+MODEL_PATH: SMAL/smal_CVPR2018.pkl
+DATA_PATH: SMAL/smal_CVPR2018_data.pkl
 GEN_DIR: SMAL
 CUDNN: BENCHMARK: True
 DETERMINISTIC: False
 ENABLED: True
-MODEL: EXTRA:
+MODEL: BOTTLENECK_SIZE: 2048
+CHANNEL_PER_GROUP: 16
+EXTRA:
   FINAL_CONV_KERNEL: 1
   PRETRAINED_LAYERS: ['conv1', 'bn1', 'conv2', 'bn2', 'layer1', 'transition1', 'stage2', 'transition2', 'stage3', 'transition3', 'stage4']
   STAGE2:
@@ -44,6 +46,8 @@ NAME: pose_hrnet
 NUM_JOINTS: 17
 NUM_KPS: 28
 NZ_FEAT: 1024
+N_SHAPE_FEAT: 40
+OPTIMIZATION: False
 PRETRAINED: models/pytorch/imagenet/hrnet_w32-36af842e.pth
 SIGMA: 2
 TAG_PER_JOINT: True
@@ -65,7 +69,8 @@ OPTIMIZER: adam
 SHUFFLE: True
 WD: 0.0001
 DATASET: COLOR_RGB: True
-DATASET: ap10k
+DATASET: animal3d
+DATA_DIR: /media/lap16043/fe6895ab-3146-48c7-ba28-d1d7add169ce/Thesis/Datasets/animal3d-20240404T061206Z-001/animal3d
 DATA_FORMAT: jpg
 FLIP: True
 NUM_JOINTS_HALF_BODY: 8

@@ -1,9 +1,11 @@
-import os
-import torch
-from dataset.animal3d import data_loader
 
 import sys
-sys.path.append("..")
+# sys.path.append("../")
+
+import os
+import torch
+from  dataset.animal3d import data_loader
+
 
 class Trainer():
     def __init__(self, cfg):

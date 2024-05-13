@@ -294,12 +294,29 @@ def batch_global_rigid_transformation(Rs, Js, parent, rotate_base = False, opts=
     # but (final_bone - init_bone)
     # ---
     if torch.cuda.is_available():
-        Js_w0 = torch.cat([Js, torch.zeros([N, 33, 1, 1]).cuda(device=opts.gpu_id)], 2)
+        Js_w0 = torch.cat([Js, torch.zeros([N, 35, 1, 1]).cuda(device=opts.gpu_id)], 2)
     else:
-        Js_w0 = torch.cat([Js, torch.zeros([N, 33, 1, 1])], 2)
+        Js_w0 = torch.cat([Js, torch.zeros([N, 35, 1, 1])], 2)
     init_bone = torch.matmul(results, Js_w0)
     # Append empty 4 x 3:
     init_bone = torch.nn.functional.pad(init_bone, (3,0,0,0,0,0,0,0))
     A = results - init_bone
 
     return new_J, A
+
+def compute_edges2verts(verts, faces):
+    """
+    Returns a list: [A, B, C, D] the 4 vertices for each edge.
+    """
+    edge_dict = {}
+    for face_id, (face) in enumerate(faces):
+        for e1, e2, o_id in [(0, 1, 2), (0, 2, 1), (1, 2, 0)]:
+            edge = tuple(sorted((face[e1], face[e2])))
+            other_v = face[o_id]
+            if edge not in edge_dict.keys():
+                edge_dict[edge] = [other_v]
+            else:
+                if other_v not in edge_dict[edge]:
+                    edge_dict[edge].append(other_v)
+    result = np.stack([np.hstack((edge, other_vs)) for edge, other_vs in edge_dict.items()])
+    return result

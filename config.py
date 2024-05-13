@@ -10,8 +10,8 @@ cfg.WORKERS = 4
 cfg.PRINT_FREQ = 100
 cfg.AUTO_RESUME = True
 cfg.LABEL_PER_CLASS = 15
-cfg.MODEL_PATH = 'SMAL/smal_CVPR2017.pkl'
-cfg.DATA_PATH = 'SMAL/smal_CVPR2017_data.pkl'
+cfg.MODEL_PATH = 'SMAL/smal_CVPR2018.pkl'
+cfg.DATA_PATH = 'SMAL/smal_CVPR2018_data.pkl'
 cfg.GEN_DIR = 'SMAL'
 
 # CUDNN params
@@ -32,7 +32,11 @@ cfg.MODEL.IMAGE_SIZE = [256, 256]  # width * height, ex: 192 * 256
 cfg.MODEL.HEATMAP_SIZE = [64, 64]  # width * height, ex: 24 * 32
 cfg.MODEL.SIGMA = 2
 cfg.MODEL.NZ_FEAT = 1024
+cfg.MODEL.BOTTLENECK_SIZE = 2048
+cfg.MODEL.CHANNEL_PER_GROUP = 16
 cfg.MODEL.NUM_KPS = 28
+cfg.MODEL.N_SHAPE_FEAT = 40
+cfg.MODEL.OPTIMIZATION = False
 cfg.MODEL.EXTRA = CN(new_allowed=True)
 
 cfg.MODEL.EXTRA.PRETRAINED_LAYERS = ['conv1', 'bn1', 'conv2', 'bn2', 'layer1', 'transition1', 'stage2', 'transition2', 'stage3', 'transition3', 'stage4']
@@ -90,7 +94,8 @@ cfg.TRAIN.N_DATA_WORKERS = 4
 # DATASET params
 cfg.DATASET = CN()
 cfg.DATASET.COLOR_RGB = True
-cfg.DATASET.DATASET = 'ap10k'
+cfg.DATASET.DATA_DIR = '/media/lap16043/fe6895ab-3146-48c7-ba28-d1d7add169ce/Thesis/Datasets/animal3d-20240404T061206Z-001/animal3d'
+cfg.DATASET.DATASET = 'animal3d'
 cfg.DATASET.DATA_FORMAT = 'jpg'
 cfg.DATASET.FLIP = True
 cfg.DATASET.NUM_JOINTS_HALF_BODY = 8

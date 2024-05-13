@@ -5,8 +5,6 @@ import numpy as np
 from models.quadrupedalismnet import QuadrupedalismNet
 from .basic_trainer import Trainer
 
-import sys
-sys.path.append("..")
 
 class ShapeTrainer(Trainer):
 
@@ -27,8 +25,11 @@ class ShapeTrainer(Trainer):
     if cfg['TRAIN']['BEGIN_EPOCH'] > 0:
       self.load_network(self.model, "quadrupedalism")
 
-    #self.model = self.model.cuda()
-
+    if torch.cuda.is_available():
+      self.model = self.model.cuda()
+    
+    edges2verts = self.model.edges2verts
+    edges2verts = np.tile(np.expand_dims(edges2verts, 0), (self.cfg['TRAIN']['BATCH_SIZE_PER_GPU'], 1, 1))
 
 
 

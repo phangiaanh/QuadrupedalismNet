@@ -1,5 +1,7 @@
 import torch.nn as nn
 from .base import BN_MOMENTUM
+import torchvision
+from torchvision.models import ResNet50_Weights
 
 class ResNet50(nn.Module):
 
@@ -46,3 +48,34 @@ class ResNet50(nn.Module):
 
     return nn.Sequential(*layers)
 
+class ResNetConv(nn.Module):
+  def __init__(self, n_blocks=4, opts=None):
+    super(ResNetConv, self).__init__()
+    self.resnet = torchvision.models.resnet50(weights=ResNet50_Weights.DEFAULT)
+
+    self.n_blocks = n_blocks
+    self.opts = opts
+    # if self.opts.use_double_input:
+    #     self.fc = nb.fc_stack(512*16*8, 512*8*8, 2)
+  def forward(self, x, y=None):
+    # if self.opts.use_double_input and y is not None:
+    #     x = torch.cat([x, y], 2)
+    n_blocks = self.n_blocks
+    x = self.resnet.conv1(x)
+    x = self.resnet.bn1(x)
+    x = self.resnet.relu(x)
+    x = self.resnet.maxpool(x)
+    if n_blocks >= 1:
+        x = self.resnet.layer1(x)
+    if n_blocks >= 2:
+        x = self.resnet.layer2(x)
+    if n_blocks >= 3:
+        x = self.resnet.layer3(x)
+    if n_blocks >= 4:
+        x = self.resnet.layer4(x)
+    # if self.opts.use_double_input and y is not None:
+    #     x = x.view(x.size(0), -1)
+    #     x = self.fc.forward(x)
+    #     x = x.view(x.size(0), 512, 8, 8)
+        
+    return 

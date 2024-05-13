@@ -79,13 +79,13 @@ class SMAL(object):
 
 
     # 3. Add pose blend shapes
-    Rs = torch.reshape( batch_rodrigues(torch.reshape(theta, [-1, 3]), opts=self.cfg), [-1, 33, 3, 3])
+    Rs = torch.reshape( batch_rodrigues(torch.reshape(theta, [-1, 3]), opts=self.cfg), [-1, 35, 3, 3])
     # Ignore global rotation.
     print(Rs[:, 1:, :, :].shape)
     if torch.cuda.is_available():
-        pose_feature = torch.reshape(Rs[:, 1:, :, :] - torch.eye(3).cuda(), [-1, 288])
+        pose_feature = torch.reshape(Rs[:, 1:, :, :] - torch.eye(3).cuda(), [-1, 306])
     else:
-        pose_feature = torch.reshape(Rs[:, 1:, :, :] - torch.eye(3), [-1, 288])
+        pose_feature = torch.reshape(Rs[:, 1:, :, :] - torch.eye(3), [-1, 306])
 
     v_posed = torch.reshape(torch.matmul(pose_feature, self.posedirs), [-1, self.size[0], self.size[1]]) + v_shaped
 
@@ -98,9 +98,9 @@ class SMAL(object):
     num_batch = theta.shape[0]
         
     weights_t = self.weights.repeat([num_batch, 1])
-    W = torch.reshape(weights_t, [num_batch, -1, 33])
+    W = torch.reshape(weights_t, [num_batch, -1, 35])
         
-    T = torch.reshape(torch.matmul(W, torch.reshape(A, [num_batch, 33, 16])), [num_batch, -1, 4, 4])
+    T = torch.reshape(torch.matmul(W, torch.reshape(A, [num_batch, 35, 16])), [num_batch, -1, 4, 4])
     
     if torch.cuda.is_available():
         v_posed_homo = torch.cat([v_posed, torch.ones([num_batch, v_posed.shape[1], 1]).cuda()], 2)
