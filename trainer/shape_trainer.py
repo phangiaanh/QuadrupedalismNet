@@ -3,8 +3,8 @@ import torch
 import os
 import numpy as np
 from models.quadrupedalismnet import QuadrupedalismNet
-from .basic_trainer import Trainer
-
+from trainer.basic_trainer import Trainer
+from utils.criterions import *
 
 class ShapeTrainer(Trainer):
 
@@ -31,7 +31,12 @@ class ShapeTrainer(Trainer):
     edges2verts = self.model.edges2verts
     edges2verts = np.tile(np.expand_dims(edges2verts, 0), (self.cfg['TRAIN']['BATCH_SIZE_PER_GPU'], 1, 1))
 
-
+  def define_criterion(self):
+    self.projection_loss = kp_12_loss
+    self.mask_loss = mask_loss
+    
+    self.model_trans_loss_fn = model_trans_loss
+    self.model_pose_loss_fn = model_pose_loss
 
     
 

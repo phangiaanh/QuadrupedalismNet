@@ -44,9 +44,13 @@ class Trainer():
     def define_model(self):
         raise NotImplementedError
     
+    def define_criterion(self):
+        raise NotImplementedError
+    
     def init_dataset(self):
         self.data_loader = data_loader(self.cfg)
 
     def init_training(self):
         self.init_dataset()
         self.define_model()
+        self.define_criterion()

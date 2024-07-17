@@ -22,6 +22,10 @@ class QuadrupedalismNet(nn.Module):
     pose = np.zeros((1,105))
     betas = np.zeros((1,self.cfg["TRAIN"]["NUM_BETAS"]))
     V,J,R = self.smal(torch.Tensor(betas), torch.Tensor(pose))
+    print("HERE")
+    print(V.shape)
+    print(J.shape)
+    print(R.shape)
     verts = V[0,:,:]
     verts = verts.data.cpu().numpy()
     faces = self.smal.f
