@@ -10,3 +10,4 @@ if __name__=="__main__":
 
     trainer = ShapeTrainer(cfg)
     trainer.init_training()
+    trainer.train()

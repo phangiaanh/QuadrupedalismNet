@@ -97,7 +97,8 @@ class Animal3DDataset(BaseDataset):
         return self.num_images
     
 
-    
+    def forward_img(self, index):
+        anno_data = self.annotations[index]
 
 
 

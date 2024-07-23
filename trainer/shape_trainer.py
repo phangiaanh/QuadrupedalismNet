@@ -39,4 +39,5 @@ class ShapeTrainer(Trainer):
     self.model_pose_loss_fn = model_pose_loss
 
     
-
+  def train():
+    pass

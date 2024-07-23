@@ -17,7 +17,7 @@ class Trainer():
         log_file = os.path.join(self.save_dir, 'config.yaml')
         with open(log_file, 'w') as f:
             for k in (self.cfg):
-                print(k)
+                # print(k)
                 f.write('{}: {}\n'.format(k, self.cfg.__getattr__(k)))
 
         pass
