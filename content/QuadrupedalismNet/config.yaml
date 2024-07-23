@@ -70,7 +70,7 @@ SHUFFLE: True
 WD: 0.0001
 DATASET: COLOR_RGB: True
 DATASET: animal3d
-DATA_DIR: /media/lap16043/fe6895ab-3146-48c7-ba28-d1d7add169ce/Thesis/Datasets/animal3d-20240404T061206Z-001/animal3d
+DATA_DIR: /home/watermelon/Thesis/animal3d
 DATA_FORMAT: jpg
 FLIP: True
 NUM_JOINTS_HALF_BODY: 8

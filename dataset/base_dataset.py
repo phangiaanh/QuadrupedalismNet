@@ -24,7 +24,8 @@ class BaseDataset(Dataset):
     def __len__(self):
         return 10
 
-
+    def __get__item():
+        pass
 
 def base_loader(dataset_init, cfg, filter_keys=None):
     dataset = dataset_init(cfg, filter_keys=filter_keys)

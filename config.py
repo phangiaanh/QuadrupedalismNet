@@ -94,7 +94,7 @@ cfg.TRAIN.N_DATA_WORKERS = 4
 # DATASET params
 cfg.DATASET = CN()
 cfg.DATASET.COLOR_RGB = True
-cfg.DATASET.DATA_DIR = '/media/lap16043/fe6895ab-3146-48c7-ba28-d1d7add169ce/Thesis/Datasets/animal3d-20240404T061206Z-001/animal3d'
+cfg.DATASET.DATA_DIR = '/home/watermelon/Thesis/animal3d'
 cfg.DATASET.DATASET = 'animal3d'
 cfg.DATASET.DATA_FORMAT = 'jpg'
 cfg.DATASET.FLIP = True
