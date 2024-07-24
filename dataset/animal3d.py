@@ -2,6 +2,7 @@ from .base_dataset import BaseDataset, base_loader
 from glob import glob
 import os
 import json
+from PIL import Image
 
 class AnnotationItem():
 
@@ -75,7 +76,8 @@ class Animal3DDataset(BaseDataset):
         for anno in anno_data:
             item = AnnotationItem(**anno)
             self.annotations[item.img_path] = item
-        
+        self.annotations_list = list([self.annotations[key] for key in self.annotations])
+
         # loop check
         counter = 0
         for i, img_path in enumerate(anno_paths):
@@ -98,7 +100,41 @@ class Animal3DDataset(BaseDataset):
     
 
     def forward_img(self, index):
-        anno_data = self.annotations[index]
+        anno_data = self.annotations_list[index]
+        img = Image.open(os.path.join(self.data_dir, anno_data.img_path))
+        return img, 1
+
+    def __getitem__(self, index):
+        return self.forward_img(index)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

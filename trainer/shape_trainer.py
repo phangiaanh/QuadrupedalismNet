@@ -39,5 +39,9 @@ class ShapeTrainer(Trainer):
     self.model_pose_loss_fn = model_pose_loss
 
     
-  def train():
+  def train(self):
+
+    for i, batch in enumerate(self.data_loader):
+      pass
+
     pass
