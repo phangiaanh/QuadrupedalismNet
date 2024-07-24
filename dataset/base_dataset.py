@@ -24,7 +24,8 @@ class BaseDataset(Dataset):
     def __len__(self):
         return 10
 
-    def __get__item():
+    def __getitem__():
+        print('NOTE HERE')
         pass
 
 def base_loader(dataset_init, cfg, filter_keys=None):

@@ -3,6 +3,7 @@ from glob import glob
 import os
 import json
 from PIL import Image
+from torchvision import transforms
 
 class AnnotationItem():
 
@@ -56,6 +57,10 @@ class Animal3DDataset(BaseDataset):
 
         # map[AnnotationItem]
         self.load_annotations(images)
+        self.transform = transforms.Compose([
+            transforms.Resize((self.cfg['MODEL']['IMAGE_SIZE'][0], self.cfg['MODEL']['IMAGE_SIZE'][1])),  
+            transforms.ToTensor(),  
+        ])
         # for i, img  in enumerate(images):
         #     print(img)
 
@@ -101,11 +106,20 @@ class Animal3DDataset(BaseDataset):
 
     def forward_img(self, index):
         anno_data = self.annotations_list[index]
-        img = Image.open(os.path.join(self.data_dir, anno_data.img_path))
+        img = Image.open(os.path.join(self.data_dir, anno_data.img_path)).convert("RGB")
+        
         return img, 1
 
     def __getitem__(self, index):
-        return self.forward_img(index)
+        print('HERE')
+        img, num = self.forward_img(index)
+        if self.transform:
+            img = self.transform(img)
+        elem = {
+            'img': img,
+            'num': num,
+        }
+        return elem
 
 
 
