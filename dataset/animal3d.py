@@ -107,6 +107,7 @@ class Animal3DDataset(BaseDataset):
     def forward_img(self, index):
         anno_data = self.annotations_list[index]
         img = Image.open(os.path.join(self.data_dir, anno_data.img_path)).convert("RGB")
+        mask = Image.open(os.path.join(self.data_dir, anno_data.mask_path)).convert("RGB")
         
         return img, 1
 
