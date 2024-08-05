@@ -33,6 +33,23 @@ class AnnotationItem():
         self.with_tail = with_tail
         self.height = height
         self.width = width
+
+    def __repr__(self) -> str:
+        
+        return f"""************************
+Image Path   : {self.img_path}
+Mask Path    : {self.mask_path}
+Bounding Box : {self.bbox}
+2D Keypoints : {self.keypoint_2d}
+2D Joints    : {self.joints_2d}
+3D Keypoints : {len(self.keypoint_3d)}
+3D Joints    : {len(self.joints_3d)}
+Pose         : {len(self.pose)}
+Shape        : {len(self.shape)}
+Trans        : {self.trans}
+Height       : {self.height}
+Width        : {self.width}
+************************"""
         
 
 class Animal3DDataset(BaseDataset):
@@ -81,7 +98,7 @@ class Animal3DDataset(BaseDataset):
         for anno in anno_data:
             item = AnnotationItem(**anno)
             self.annotations[item.img_path] = item
-        self.annotations_list = list([self.annotations[key] for key in self.annotations])
+        self.annotations_list:list[AnnotationItem] = list([self.annotations[key] for key in self.annotations])
 
         # loop check
         counter = 0
@@ -108,12 +125,12 @@ class Animal3DDataset(BaseDataset):
         anno_data = self.annotations_list[index]
         img = Image.open(os.path.join(self.data_dir, anno_data.img_path)).convert("RGB")
         mask = Image.open(os.path.join(self.data_dir, anno_data.mask_path)).convert("RGB")
-        
-        return img, 1
+                
+        return img, mask, anno_data
 
     def __getitem__(self, index):
         print('HERE')
-        img, num = self.forward_img(index)
+        img,  = self.forward_img(index)
         if self.transform:
             img = self.transform(img)
         elem = {
