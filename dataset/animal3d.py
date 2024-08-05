@@ -130,12 +130,14 @@ class Animal3DDataset(BaseDataset):
 
     def __getitem__(self, index):
         print('HERE')
-        img,  = self.forward_img(index)
+        img, mask, anno = self.forward_img(index)
         if self.transform:
             img = self.transform(img)
         elem = {
             'img': img,
-            'num': num,
+            'mask': mask,
+            'anno': anno
+
         }
         return elem
 
