@@ -2,6 +2,7 @@ from trainer.shape_trainer import ShapeTrainer
 from config import cfg
 import torch
 
+torch.multiprocessing.set_sharing_strategy('file_system')
 
 if __name__=="__main__":
 

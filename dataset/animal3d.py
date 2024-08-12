@@ -126,17 +126,25 @@ class Animal3DDataset(BaseDataset):
         img = Image.open(os.path.join(self.data_dir, anno_data.img_path)).convert("RGB")
         mask = Image.open(os.path.join(self.data_dir, anno_data.mask_path)).convert("RGB")
                 
-        return img, mask, anno_data
+        return img, mask, anno_data.joints_2d, anno_data.joints_3d, anno_data.keypoint_2d, anno_data.keypoint_3d, anno_data.pose, anno_data.shape, anno_data.trans
 
     def __getitem__(self, index):
-        print('HERE')
-        img, mask, anno = self.forward_img(index)
+        # print('HERE')
+        img, mask, j2, j3, k2, k3, sp, ss, st = self.forward_img(index)
         if self.transform:
             img = self.transform(img)
+            mask = self.transform(mask)
         elem = {
             'img': img,
             'mask': mask,
-            'anno': anno
+            'joints_2d': j2,
+            'joints_3d': j3,
+            'keypoints_2d': k2,
+            'keypoints_3d': k3,
+            'pose': sp,
+            'shape': ss,
+            'trans': st,
+            # 'anno': anno
 
         }
         return elem
