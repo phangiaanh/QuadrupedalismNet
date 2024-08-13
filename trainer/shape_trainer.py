@@ -41,7 +41,15 @@ class ShapeTrainer(Trainer):
     
   def train(self):
 
+    i = 0
+    for epoch in range(self.cfg['TRAIN']['BEGIN_EPOCH'], self.cfg['TRAIN']['END_EPOCH']):
+      epoch_iter = 0
+      i += 1
+
+    print(i)
+
     for i, batch in enumerate(self.data_loader):
+
       pass
 
     pass
