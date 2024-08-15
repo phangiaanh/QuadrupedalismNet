@@ -2,6 +2,7 @@ import pickle
 import torch
 import os
 import numpy as np
+import time
 from models.quadrupedalismnet import QuadrupedalismNet
 from trainer.basic_trainer import Trainer
 from utils.criterions import *
@@ -38,18 +39,22 @@ class ShapeTrainer(Trainer):
     self.model_trans_loss_fn = model_trans_loss
     self.model_pose_loss_fn = model_pose_loss
     
-    
-  def train(self):
+  
+  def set_input(self, batch):
+    img_tensor = batch['img'].clone().type(torch.FloatTensor)
+    print(img_tensor.shape)
 
+
+  def train(self):
     i = 0
     for epoch in range(self.cfg['TRAIN']['BEGIN_EPOCH'], self.cfg['TRAIN']['END_EPOCH']):
       epoch_iter = 0
       i += 1
+      for i, batch in enumerate(self.data_loader):
+        iter_start_time = time.time()
+        self.set_input(batch)
+        pass
+
 
     print(i)
-
-    for i, batch in enumerate(self.data_loader):
-
-      pass
-
     pass
