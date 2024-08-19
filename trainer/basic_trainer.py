@@ -3,6 +3,7 @@ import sys
 # sys.path.append("../")
 
 import os
+import time
 import torch
 from  dataset.animal3d import data_loader
 
@@ -47,6 +48,9 @@ class Trainer():
     def define_criterion(self):
         raise NotImplementedError
     
+    def forward(self):
+        raise NotImplementedError
+    
     def init_dataset(self):
         self.data_loader = data_loader(self.cfg)
 
@@ -54,3 +58,21 @@ class Trainer():
         self.init_dataset()
         self.define_model()
         self.define_criterion()
+
+    def train(self):
+        i = 0
+        for epoch in range(self.cfg['TRAIN']['BEGIN_EPOCH'], self.cfg['TRAIN']['END_EPOCH']):
+          epoch_iter = 0
+          i += 1
+          for i, batch in enumerate(self.data_loader):
+            iter_start_time = time.time()
+
+            self.set_input(batch)
+
+            if not self.invalid_batch:
+              self.forward()
+            pass
+
+
+        print(i)
+        pass

@@ -129,7 +129,6 @@ class Animal3DDataset(BaseDataset):
         return img, mask, anno_data.joints_2d, anno_data.joints_3d, anno_data.keypoint_2d, anno_data.keypoint_3d, anno_data.pose, anno_data.shape, anno_data.trans
 
     def __getitem__(self, index):
-        # print('HERE')
         img, mask, j2, j3, k2, k3, sp, ss, st = self.forward_img(index)
         if self.transform:
             img = self.transform(img)

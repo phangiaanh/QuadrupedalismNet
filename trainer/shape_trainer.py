@@ -1,5 +1,6 @@
 import pickle
 import torch
+import torchvision
 import os
 import numpy as np
 import time
@@ -32,6 +33,12 @@ class ShapeTrainer(Trainer):
     edges2verts = self.model.edges2verts
     edges2verts = np.tile(np.expand_dims(edges2verts, 0), (self.cfg['TRAIN']['BATCH_SIZE_PER_GPU'], 1, 1))
 
+    self.resnet_transform = torchvision.transforms.Normalize(
+      mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
+    
+    self.invalid_batch = False
+
+
   def define_criterion(self):
     self.projection_loss = kp_12_loss
     self.mask_loss = mask_loss
@@ -44,17 +51,55 @@ class ShapeTrainer(Trainer):
     img_tensor = batch['img'].clone().type(torch.FloatTensor)
     print(img_tensor.shape)
 
+    input_img_tensor = batch['img'].type(torch.FloatTensor)
 
-  def train(self):
-    i = 0
-    for epoch in range(self.cfg['TRAIN']['BEGIN_EPOCH'], self.cfg['TRAIN']['END_EPOCH']):
-      epoch_iter = 0
-      i += 1
-      for i, batch in enumerate(self.data_loader):
-        iter_start_time = time.time()
-        self.set_input(batch)
-        pass
+    for b in range(input_img_tensor.size(0)):
+      input_img_tensor[b] = self.resnet_transform(input_img_tensor[b])
 
+    if torch.cuda.is_available():
+      self.input_imgs = input_img_tensor.cuda()
+      self.imgs = img_tensor.cuda()
+    else:
+      self.input_imgs = input_img_tensor
+      self.imgs = img_tensor
 
-    print(i)
+    if 'mask' in batch.keys():
+      mask_tensor = batch['mask'].type(torch.FloatTensor)
+      if torch.cuda.is_available():
+        self.masks = mask_tensor.cuda()
+      else:
+        self.masks = mask_tensor
+
+    if 'keypoints_2d' in batch.keys():
+      kp_tensor = batch['kp'].type(torch.FloatTensor)
+      if torch.cuda.is_available():
+        self.kps2 = kp_tensor.cuda()
+      else:
+        self.kps2 = kp_tensor
+
+    if 'pose' in batch.keys():
+      model_pose_tensor = batch['pose'].type(torch.FloatTensor)
+      if torch.cuda.is_available():
+        self.model_pose = model_pose_tensor.cuda()
+      else:
+        self.model_pose = model_pose_tensor
+
+    if 'shape' in batch.keys():
+      model_shape_tensor = batch['shape'].type(torch.FloatTensor)
+      if torch.cuda.is_available():
+        self.model_shape = model_shape_tensor.cuda()
+      else:
+        self.model_shape = model_shape_tensor
+
+    if 'trans' in batch.keys():
+      model_trans_tensor = batch['trans'].type(torch.FloatTensor)
+      if torch.cuda.is_available():
+        self.model_trans = model_trans_tensor.cuda()
+      else:
+        self.model_trans = model_trans_tensor
+    
+
+  def forward(self):
+
     pass
+    

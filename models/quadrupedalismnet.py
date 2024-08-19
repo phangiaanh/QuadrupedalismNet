@@ -63,7 +63,7 @@ class QuadrupedalismNet(nn.Module):
     if self.cfg['MODEL']['OPTIMIZATION']:
       if self.op_features is None:
         img_feat, enc_feat = self.encoder.forward(img, masks)
-        self.op_features = Variable(img_feat.cuda(device=self.opts.gpu_id), requires_grad=True)
+        self.op_features = img_feat.cuda()
       codes_pred = self.code_predictor.forward(self.op_features, None)
       img_feat = self.op_features
     else:
