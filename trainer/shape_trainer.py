@@ -7,6 +7,7 @@ import time
 from models.quadrupedalismnet import QuadrupedalismNet
 from trainer.basic_trainer import Trainer
 from utils.criterions import *
+from utils.image import compute_dt_barrier
 
 class ShapeTrainer(Trainer):
 
@@ -70,8 +71,10 @@ class ShapeTrainer(Trainer):
       else:
         self.masks = mask_tensor
 
+    # print(batch['keypoints_2d'].dtype)
     if 'keypoints_2d' in batch.keys():
-      kp_tensor = batch['kp'].type(torch.FloatTensor)
+      # kp_tensor = torch.FloatTensor(batch['keypoints_2d'])
+      kp_tensor = torch.stack(batch['keypoints_2d'][0])
       if torch.cuda.is_available():
         self.kps2 = kp_tensor.cuda()
       else:
@@ -97,7 +100,15 @@ class ShapeTrainer(Trainer):
         self.model_trans = model_trans_tensor.cuda()
       else:
         self.model_trans = model_trans_tensor
-    
+
+    if self.masks is not None:
+      mask_dts = np.stack([compute_dt_barrier(m) for m in batch['mask']])
+      dt_tensor = torch.FloatTensor(mask_dts)
+
+      if torch.cuda.is_available():
+        self.dts_barrier = dt_tensor.cuda().unsqueeze(1)
+      else:
+        self.dts_barrier = dt_tensor.unsqueeze(1)  
 
   def forward(self):
 
