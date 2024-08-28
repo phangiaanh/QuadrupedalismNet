@@ -138,8 +138,8 @@ class Animal3DDataset(BaseDataset):
             mask = self.transform(mask)
 
         k2 = torch.Tensor(k2)
-        print(f'index: {index}')
-        print(f'k2: {k2}')
+        # print(f'index: {index}')
+        # print(f'k2: {k2}')
         # print(f'k2: {len(k2)}')
         # print(f'k2: {len(k2[0])}')
         # print(f'k2: {len(k2[0][0])}')
@@ -147,13 +147,13 @@ class Animal3DDataset(BaseDataset):
         elem = {
             'img': img,
             'mask': mask,
-            'joints_2d': j2,
-            'joints_3d': j3,
-            'keypoints_2d': k2,
-            'keypoints_3d': k3,
-            'pose': sp,
-            'shape': ss,
-            'trans': st,
+            'joints_2d': torch.Tensor(j2),
+            'joints_3d': torch.Tensor(j3),
+            'keypoints_2d': torch.Tensor(k2),
+            'keypoints_3d': torch.Tensor(k3),
+            'pose': torch.Tensor(sp),
+            'shape': torch.Tensor(ss),
+            'trans': torch.Tensor(st),
             # 'anno': anno
 
         }

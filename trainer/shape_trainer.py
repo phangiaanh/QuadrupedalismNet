@@ -78,8 +78,9 @@ class ShapeTrainer(Trainer):
     if 'keypoints_2d' in batch.keys():
       # print(batch['keypoints_2d'])
       # kp_tensor = torch.FloatTensor(batch['keypoints_2d'])
-      kp_tensor = torch.stack(batch['keypoints_2d'])
-      print('aaa')
+      # kp_tensor = torch.stack(batch['keypoints_2d'])
+      kp_tensor = batch['keypoints_2d'].type(torch.FloatTensor)
+      # print('aaa')
       # print(kp_tensor.shape)
       if torch.cuda.is_available():
         self.kps2 = kp_tensor.cuda()
