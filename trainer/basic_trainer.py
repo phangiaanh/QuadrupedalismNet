@@ -64,14 +64,20 @@ class Trainer():
         for epoch in range(self.cfg['TRAIN']['BEGIN_EPOCH'], self.cfg['TRAIN']['END_EPOCH']):
           epoch_iter = 0
           i += 1
-          for i, batch in enumerate(self.data_loader):
+          for j, batch in enumerate(self.data_loader):
             iter_start_time = time.time()
-
+            # print(batch)
+            print(f"iteration: {j} and len: {len(batch['joints_2d'])}")
+            # print(f"Batch {i} shape: {batch.shape if isinstance(batch, torch.Tensor) else [item.shape for item in batch]}")
+            # print(f"aa: {len(batch['keypoints_2d'][0])}")
+            # print(f"aa: {len(batch['keypoints_2d'][0][0])}")
+            # print(f"aa: {len(batch['keypoints_2d'][0][0][0])}")
+            print(f"aa: {batch['keypoints_2d']}")
             self.set_input(batch)
 
-            if not self.invalid_batch:
-              self.forward()
-            pass
+            # if not self.invalid_batch:
+            #   self.forward()
+            # pass
 
 
         print(i)

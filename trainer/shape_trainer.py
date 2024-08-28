@@ -71,10 +71,16 @@ class ShapeTrainer(Trainer):
       else:
         self.masks = mask_tensor
 
-    # print(batch['keypoints_2d'].dtype)
+    # print(batch['keypoints_2d'])
+    # print(len(batch['keypoints_2d']))
+    # print(len(batch['keypoints_2d'][0]))
+    # print(len(batch['keypoints_2d'][0][0]))
     if 'keypoints_2d' in batch.keys():
+      # print(batch['keypoints_2d'])
       # kp_tensor = torch.FloatTensor(batch['keypoints_2d'])
-      kp_tensor = torch.stack(batch['keypoints_2d'][0])
+      kp_tensor = torch.stack(batch['keypoints_2d'])
+      print('aaa')
+      # print(kp_tensor.shape)
       if torch.cuda.is_available():
         self.kps2 = kp_tensor.cuda()
       else:

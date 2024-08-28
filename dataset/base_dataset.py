@@ -22,7 +22,7 @@ class BaseDataset(Dataset):
         print(self.shapedirs.shape)
 
     def __len__(self):
-        return 10
+        return len(self.annotations_list)
 
     def __getitem__():
         print('NOTE HERE')
@@ -33,7 +33,11 @@ def base_loader(dataset_init, cfg, filter_keys=None):
     return DataLoader(
         dataset,
         batch_size=cfg['TRAIN']['BATCH_SIZE_PER_GPU'],
-        shuffle=cfg['TRAIN']['SHUFFLE'],
-        num_workers=cfg['TRAIN']['N_DATA_WORKERS'],
-        drop_last=True
+        # shuffle=cfg['TRAIN']['SHUFFLE'],
+        num_workers=cfg['TRAIN']['N_EXTRA_WORKERS'],
+        drop_last=True,
+        # collate_fn=collate_fn
     )
+
+# def collate_fn(data):
+#     print(f"Length: {len(data)}")

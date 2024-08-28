@@ -3,6 +3,7 @@ from glob import glob
 import os
 import json
 from PIL import Image
+import torch
 from torchvision import transforms
 
 class AnnotationItem():
@@ -118,14 +119,16 @@ class Animal3DDataset(BaseDataset):
 
 
     def __len__(self):
-        return self.num_images
+        print(f"OOOOOOOOOOOOOO: {len(self.annotations_list)}")
+        return len(self.annotations_list)
     
 
     def forward_img(self, index):
         anno_data = self.annotations_list[index]
         img = Image.open(os.path.join(self.data_dir, anno_data.img_path)).convert("RGB")
         mask = Image.open(os.path.join(self.data_dir, anno_data.mask_path)).convert("RGB")
-                
+
+        
         return img, mask, anno_data.joints_2d, anno_data.joints_3d, anno_data.keypoint_2d, anno_data.keypoint_3d, anno_data.pose, anno_data.shape, anno_data.trans
 
     def __getitem__(self, index):
@@ -133,6 +136,14 @@ class Animal3DDataset(BaseDataset):
         if self.transform:
             img = self.transform(img)
             mask = self.transform(mask)
+
+        k2 = torch.Tensor(k2)
+        print(f'index: {index}')
+        print(f'k2: {k2}')
+        # print(f'k2: {len(k2)}')
+        # print(f'k2: {len(k2[0])}')
+        # print(f'k2: {len(k2[0][0])}')
+        
         elem = {
             'img': img,
             'mask': mask,
